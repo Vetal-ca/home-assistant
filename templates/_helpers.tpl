@@ -60,3 +60,11 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{- define "home-assistant.repo.fqdn" -}}
+{{- if .Values.configRepo.password }}
+{{- .Values.configRepo.scheme}}{{ .Values.configRepo.user }}:{{ .Values.configRepo.password }}@{{ .Values.configRepo.address }}
+{{- else }}
+{{- .Values.configRepo.scheme}}{{ .Values.configRepo.user }}@{{ .Values.configRepo.address }}
+{{- end }}
+{{- end }}

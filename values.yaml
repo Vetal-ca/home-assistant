@@ -5,14 +5,14 @@
 replicaCount: 1
 
 image:
-  repository: nginx
+  repository: homeassistant/home-assistant
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "2023.10"
 
 imagePullSecrets: []
 nameOverride: ""
-fullnameOverride: ""
+fullnameOverride: "home-assistant"
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -41,7 +41,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8123
 
 
 resources: {}
@@ -57,21 +57,27 @@ resources: {}
   #   memory: 128Mi
 
 
-# Additional volumes on the output Deployment definition.
-volumes: []
-# - name: foo
-#   secret:
-#     secretName: mysecret
-#     optional: false
-
-# Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
-# - name: foo
-#   mountPath: "/etc/foo"
-#   readOnly: true
-
 nodeSelector: {}
 
 tolerations: []
 
 affinity: {}
+
+# Repository to pull in to config folder in case it is empty
+configRepo:
+  # repository address
+  address: "unknown"
+  branch: master
+  # or https://
+  scheme: ""
+  user: git
+  password: ""
+
+# Storage whereabouts for config volume
+configStorage:
+  storageClassName: "local-path"
+  size: 1Gi
+
+# File which end up to be /config/secrets.yaml
+# Init container, if secrets are present while /config/secrets.yaml not, will copy this file over
+secrets: ""
